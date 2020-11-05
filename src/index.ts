@@ -1,5 +1,4 @@
 import auth from "./auth"
+import track from "./track"
 
-export default {
-  auth,
-}
+export { auth, track }

@@ -1,14 +1,14 @@
 import axios from "axios"
 import * as qs from "qs"
 
-const baseURL = "https://auth.tidal.com/v1/"
+const baseURL = "https://auth.tidal.com/v1/oauth2"
 
-interface DeviceTokenInput {
+type DeviceTokenInput = {
   client_id: string
-  scope: string
+  scope?: string
 }
 
-interface DeviceTokenOutput {
+type DeviceTokenOutput = {
   deviceCode: string
   userCode: string
   verificationUri: string
@@ -17,7 +17,7 @@ interface DeviceTokenOutput {
   interval: number
 }
 
-interface AccessTokenInput {
+type AccessTokenInput = {
   client_id: string
   client_secret: string
   device_code: string
@@ -25,7 +25,7 @@ interface AccessTokenInput {
   scope?: string
 }
 
-interface AccessTokenOutput {
+type AccessTokenOutput = {
   access_token: string
   refresh_token: string
   token_type: string
@@ -33,17 +33,28 @@ interface AccessTokenOutput {
 }
 
 const auth = {
-  getDeviceToken: async ({ client_id, scope }: DeviceTokenInput): Promise<DeviceTokenOutput> => {
+  /**
+   * Generate a DeviceCode and UserCode.
+   * After that, redirect the User to the verificationUriComplete URI
+   */
+  getDeviceToken: async ({
+    client_id,
+    scope = "r_usr+w_usr+w_sub",
+  }: DeviceTokenInput): Promise<DeviceTokenOutput> => {
     const { data } = await axios({
       baseURL,
       method: "post",
-      url: "oauth2/device_authorization",
+      url: "/device_authorization",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       data: qs.stringify({ client_id, scope }),
     })
 
     return data
   },
+  /**
+   * Using the DeviceCode, poll this endpoint with the defined interval until
+   * it stops returning the "authorization_pending" error.
+   */
   getAccessToken: async ({
     client_id,
     client_secret,
@@ -54,7 +65,7 @@ const auth = {
     const { data } = await axios({
       baseURL,
       method: "post",
-      url: "oauth2/token",
+      url: "/token",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       auth: {
         username: client_id,
