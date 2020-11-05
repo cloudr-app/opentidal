@@ -1,0 +1,35 @@
+{
+  "name": "opentidal",
+  "version": "0.0.1",
+  "description": "TypeScript implementation of the openTIDAL project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"no tests\"",
+    "dev": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openTIDAL/openTIDAL.js.git"
+  },
+  "keywords": [
+    "openTIDAL",
+    "TIDAL",
+    "API"
+  ],
+  "author": "vaaski <admin@vaa.ski>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/openTIDAL/openTIDAL.js/issues"
+  },
+  "homepage": "https://github.com/openTIDAL/openTIDAL.js#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "@types/qs": "^6.9.5",
+    "axios": "^0.21.0",
+    "qs": "^6.9.4"
+  }
+}
