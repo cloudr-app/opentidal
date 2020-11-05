@@ -37,7 +37,7 @@ type GetOutput = {
   mixes: object
 }
 
-type playbackInfoPostPaywallInput = {
+type GetStreamInput = {
   id: number
   access_token: string
   audioquality?: "LOW" | "HIGH" | "LOSSLESS"
@@ -55,7 +55,7 @@ type playbackInfoPostPaywallResponse = {
   manifest: string
 }
 
-type playbackInfoPostPaywallOutput = {
+type GetStreamOutput = {
   mimeType: string
   codecs: string
   encryptionType: string
@@ -96,14 +96,14 @@ const track = {
    * Recommended way to get a streaming URL.
    * Provide the track ID and valid access_token
    */
-  playbackInfoPostPaywall: async ({
+  getStream: async ({
     id,
     access_token,
-    audioquality = "LOSSLESS",
+    audioquality = "HIGH",
     playbackmode = "STREAM",
     assetpresentation = "FULL",
     countryCode = "US",
-  }: playbackInfoPostPaywallInput): Promise<playbackInfoPostPaywallOutput> => {
+  }: GetStreamInput): Promise<GetStreamOutput> => {
     const { data }: { data: playbackInfoPostPaywallResponse } = await axios({
       baseURL,
       url: `${id}/playbackinfopostpaywall`,
