@@ -1,4 +1,4 @@
-type TrackArtist = {
+type Creator = {
   id: number
   name: string
   type: string
@@ -6,8 +6,8 @@ type TrackArtist = {
 
 type Track = {
   allowStreaming: boolean
-  artist: TrackArtist
-  artists: Array<TrackArtist>
+  artist: Creator
+  artists: Array<Creator>
   audioModes: Array<string>
   audioQuality: string
   copyright: string
@@ -40,8 +40,8 @@ type Track = {
 
 type Album = {
   allowStreaming: boolean
-  artist: TrackArtist
-  artists: Array<TrackArtist>
+  artist: Creator
+  artists: Array<Creator>
   audioModes: Array<string>
   audioQuality: string
   copyright: string
@@ -65,4 +65,35 @@ type Album = {
   videoCover: null
 }
 
-export { Track, Album }
+type PlaylistInfo = {
+  created: string
+  creator: Creator
+  description: string
+  duration: number
+  image: string
+  lastItemAddedAt: string
+  lastUpdated: string
+  numberOfTracks: number
+  numberOfVideos: number
+  popularity: number
+  promotedArtists: Array<Creator>
+  publicPlaylist: boolean
+  squareImage: string
+  title: string
+  type: string
+  url: string
+  uuid: string
+}
+
+type PlaylistContent = {
+  limit: number
+  offset: number
+  totalNumberOfItems: number
+  items: Array<{
+    type: string
+    cut: any
+    item: Track
+  }>
+}
+
+export { Track, Album, PlaylistInfo, PlaylistContent }
