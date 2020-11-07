@@ -1,7 +1,9 @@
 import axios from "axios"
+import { Track } from "./types"
 
 const baseURL = "https://api.tidal.com/v1/tracks"
 const atob = (str) => Buffer.from(str, "base64").toString("binary")
+// TODO add mix
 
 type GetInput = {
   id: number
@@ -10,34 +12,7 @@ type GetInput = {
   access_token?: string
 } & ({ client_id: string } | { access_token: string })
 
-type GetOutput = {
-  id: number
-  title: string
-  duration: number
-  replayGain: number
-  peak: number
-  allowStreaming: boolean
-  streamReady: boolean
-  streamStartDate: string
-  premiumStreamingOnly: boolean
-  trackNumber: number
-  volumeNumber: number
-  version: null
-  popularity: number
-  copyright: string
-  url: string
-  isrc: string
-  editable: boolean
-  explicit: boolean
-  audioQuality: string
-  audioModes: Array<string>
-  artist: object
-  artists: Array<object>
-  album: object
-  mixes: object
-}
-
-type GetStreamInput = {
+type StreamInput = {
   id: number
   access_token: string
   audioquality?: "LOW" | "HIGH" | "LOSSLESS"
@@ -46,7 +21,7 @@ type GetStreamInput = {
   countryCode?: string
 }
 
-type playbackInfoPostPaywallResponse = {
+type PlaybackInfoPostPaywallResponse = {
   trackId: number
   assetPresentation: string
   audioMode: string
@@ -55,12 +30,31 @@ type playbackInfoPostPaywallResponse = {
   manifest: string
 }
 
-type GetStreamOutput = {
+type StreamOutput = {
   mimeType: string
   codecs: string
   encryptionType: string
   urls: Array<string>
 }
+
+type ContributorsOutput = {
+  limit: number
+  offset: number
+  totalNumberOfItems: number
+  items: Array<{
+    name: string
+    role: string
+  }>
+}
+
+type ContributorsInput = {
+  id: number
+  limit?: number
+  offset?: number
+  countryCode?: string
+  client_id?: string
+  access_token?: string
+} & ({ client_id: string } | { access_token: string })
 
 const track = {
   /**
@@ -68,12 +62,7 @@ const track = {
    * You need to either provide a client_id or an access_token.
    * Optionally you can set a countryCode, defaults to US.
    */
-  get: async ({
-    id,
-    countryCode = "US",
-    client_id,
-    access_token,
-  }: GetInput): Promise<GetOutput> => {
+  get: async ({ id, countryCode = "US", client_id, access_token }: GetInput): Promise<Track> => {
     let headers: object = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
@@ -96,15 +85,15 @@ const track = {
    * Recommended way to get a streaming URL.
    * Provide the track ID and valid access_token
    */
-  getStream: async ({
+  stream: async ({
     id,
     access_token,
     audioquality = "HIGH",
     playbackmode = "STREAM",
     assetpresentation = "FULL",
     countryCode = "US",
-  }: GetStreamInput): Promise<GetStreamOutput> => {
-    const { data }: { data: playbackInfoPostPaywallResponse } = await axios({
+  }: StreamInput): Promise<StreamOutput> => {
+    const { data }: { data: PlaybackInfoPostPaywallResponse } = await axios({
       baseURL,
       url: `${id}/playbackinfopostpaywall`,
       headers: { authorization: `Bearer ${access_token}` },
@@ -120,6 +109,40 @@ const track = {
       throw new Error("application/dash+xml is not supported")
 
     return JSON.parse(atob(data.manifest))
+  },
+  /**
+   * Get a track's contributors.
+   * You need to either provide a client_id or an access_token.
+   * Limit and Offset are optional and default to 50 and 0, respectively.
+   * Optionally you can set a countryCode, defaults to US.
+   */
+  contributors: async ({
+    id,
+    countryCode = "US",
+    limit = 50,
+    offset = 0,
+    client_id,
+    access_token,
+  }: ContributorsInput): Promise<ContributorsOutput> => {
+    let headers: object = { "x-tidal-token": client_id }
+    if (!client_id) headers = { authorization: `Bearer ${access_token}` }
+
+    if (!client_id && !access_token)
+      throw new Error("You need to either provide a client_id or an access_token.")
+
+    const { data } = await axios({
+      baseURL,
+      method: "get",
+      url: `${id}/contributors`,
+      params: {
+        countryCode,
+        limit,
+        offset,
+      },
+      headers,
+    })
+
+    return data
   },
 }
 

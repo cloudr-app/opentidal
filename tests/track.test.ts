@@ -11,7 +11,13 @@ test("Get track info", async () => {
 })
 
 test("Get track streaming url", async () => {
-  const data = await track.getStream({ id, access_token })
-  expect(data.urls).not.toHaveLength(0)
+  const data = await track.stream({ id, access_token })
+  expect(data.urls.length).toBeGreaterThan(0)
   expect(data.encryptionType).toBe("NONE")
+})
+
+test("Get track contributors", async () => {
+  const data = await track.contributors({ id, access_token })
+  expect(data.items.length).toBeGreaterThan(0)
+  expect(data.items[0].name).toBeTruthy()
 })
