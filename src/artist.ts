@@ -4,14 +4,14 @@ import { Track, Album, AccessTokenOrClientId } from "./types"
 const prefixUrl = "https://api.tidal.com/v1/artists"
 // TODO add videos and mix
 
-type GetInput = {
+type GetArgs = {
   id: number
   countryCode?: string
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
 
-type GetOutput = {
+type Artist = {
   id: number
   name: string
   artistTypes: Array<string>
@@ -28,28 +28,28 @@ type GetOutput = {
   }
 }
 
-type BioInput = {
+type BioArgs = {
   id: number
   countryCode?: string
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
 
-type BioOutput = {
+type Bio = {
   source: string
   lastUpdated: string
   text: string
   summary: string
 }
 
-type LinksInput = {
+type LinksArgs = {
   id: number
   countryCode?: string
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
 
-type LinksOutput = {
+type Links = {
   limit: number
   offset: number
   totalNumberOfItems: number
@@ -60,7 +60,7 @@ type LinksOutput = {
   source: string
 }
 
-type TopTracksInput = {
+type TopTracksArgs = {
   id: number
   limit?: number
   offset?: number
@@ -69,14 +69,14 @@ type TopTracksInput = {
   access_token?: string
 } & AccessTokenOrClientId
 
-type TopTracksOutput = {
+type TopTracks = {
   limit: number
   offset: number
   totalNumberOfItems: number
   items: Array<Track>
 }
 
-type AlbumsInput = {
+type AlbumsArgs = {
   id: number
   limit?: number
   offset?: number
@@ -98,7 +98,7 @@ const artist = {
    * You need to either provide a client_id or an access_token.
    * Optionally you can set a countryCode, defaults to US.
    */
-  get: async ({ id, countryCode = "US", client_id, access_token }: GetInput) => {
+  get: async ({ id, countryCode = "US", client_id, access_token }: GetArgs) => {
     let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
@@ -114,14 +114,14 @@ const artist = {
       headers,
     }).json()
 
-    return data as GetOutput
+    return data as Artist
   },
   /**
    * Get an artist's bio.
    * You need to either provide a client_id or an access_token.
    * Optionally you can set a countryCode, defaults to US.
    */
-  bio: async ({ id, countryCode = "US", client_id, access_token }: BioInput) => {
+  bio: async ({ id, countryCode = "US", client_id, access_token }: BioArgs) => {
     let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
@@ -137,7 +137,7 @@ const artist = {
       headers,
     }).json()
 
-    return data as BioOutput
+    return data as Bio
   },
   /**
    * Get an artist's links.
@@ -146,7 +146,7 @@ const artist = {
    * You need to either provide a client_id or an access_token.
    * Optionally you can set a countryCode, defaults to US.
    */
-  links: async ({ id, countryCode = "US", client_id, access_token }: LinksInput) => {
+  links: async ({ id, countryCode = "US", client_id, access_token }: LinksArgs) => {
     let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
@@ -162,7 +162,7 @@ const artist = {
       headers,
     }).json()
 
-    return data as LinksOutput
+    return data as Links
   },
   /**
    * Get an artist's top tracks.
@@ -177,7 +177,7 @@ const artist = {
     offset = 0,
     client_id,
     access_token,
-  }: TopTracksInput) => {
+  }: TopTracksArgs) => {
     let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
@@ -195,7 +195,7 @@ const artist = {
       headers,
     }).json()
 
-    return data as TopTracksOutput
+    return data as TopTracks
   },
   /**
    * Get an artist's albums.
@@ -210,7 +210,7 @@ const artist = {
     offset = 0,
     client_id,
     access_token,
-  }: AlbumsInput) => {
+  }: AlbumsArgs) => {
     let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 

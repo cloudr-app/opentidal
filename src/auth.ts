@@ -2,12 +2,12 @@ import got from "got"
 
 const prefixUrl = "https://auth.tidal.com/v1/oauth2"
 
-type DeviceTokenInput = {
+type DeviceTokenArgs = {
   client_id: string
   scope?: string
 }
 
-type DeviceTokenOutput = {
+type DeviceToken = {
   deviceCode: string
   userCode: string
   verificationUri: string
@@ -16,7 +16,7 @@ type DeviceTokenOutput = {
   interval: number
 }
 
-type AccessTokenInput = {
+type AccessTokenArgs = {
   client_id: string
   client_secret: string
   device_code: string
@@ -24,7 +24,7 @@ type AccessTokenInput = {
   scope?: string
 }
 
-type AccessTokenOutput = {
+type AccessToken = {
   access_token: string
   refresh_token: string
   token_type: string
@@ -36,7 +36,7 @@ const auth = {
    * Generate a DeviceCode and UserCode.
    * After that, redirect the User to the verificationUriComplete URI
    */
-  getDeviceToken: async ({ client_id, scope = "r_usr+w_usr+w_sub" }: DeviceTokenInput) => {
+  getDeviceToken: async ({ client_id, scope = "r_usr+w_usr+w_sub" }: DeviceTokenArgs) => {
     const data = await got({
       prefixUrl,
       method: "post",
@@ -44,7 +44,7 @@ const auth = {
       form: { client_id, scope },
     }).json()
 
-    return data as DeviceTokenOutput
+    return data as DeviceToken
   },
   /**
    * Using the DeviceCode, poll this endpoint with the defined interval until
@@ -56,7 +56,7 @@ const auth = {
     device_code,
     grant_type = "urn:ietf:params:oauth:grant-type:device_code",
     scope = "r_usr+w_usr",
-  }: AccessTokenInput) => {
+  }: AccessTokenArgs) => {
     const data = await got({
       prefixUrl,
       method: "post",
@@ -72,7 +72,7 @@ const auth = {
       },
     }).json()
 
-    return data as AccessTokenOutput
+    return data as AccessToken
   },
 }
 

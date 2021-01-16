@@ -4,14 +4,14 @@ import { PlaylistInfo, PlaylistContent, AccessTokenOrClientId } from "./types"
 const prefixUrl = "https://api.tidal.com/v1/playlists"
 // TODO add all the endpoints that modify stuff
 
-type GetInput = {
+type GetArgs = {
   uuid: string
   countryCode?: string
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
 
-type ItemsInput = {
+type ItemsArgs = {
   uuid: string
   limit?: number
   offset?: number
@@ -20,7 +20,7 @@ type ItemsInput = {
   access_token?: string
 } & AccessTokenOrClientId
 
-type RecommendationsInput = {
+type RecommendationsArgs = {
   uuid: string
   limit?: number
   offset?: number
@@ -35,7 +35,7 @@ const playlist = {
    * You need to either provide a client_id or an access_token.
    * Optionally you can set a countryCode, defaults to US.
    */
-  get: async ({ uuid, countryCode = "US", client_id, access_token }: GetInput) => {
+  get: async ({ uuid, countryCode = "US", client_id, access_token }: GetArgs) => {
     let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
@@ -67,7 +67,7 @@ const playlist = {
     offset = 0,
     client_id,
     access_token,
-  }: ItemsInput) => {
+  }: ItemsArgs) => {
     let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
@@ -101,7 +101,7 @@ const playlist = {
     offset = 0,
     client_id,
     access_token,
-  }: RecommendationsInput) => {
+  }: RecommendationsArgs) => {
     let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 

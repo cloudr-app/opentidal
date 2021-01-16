@@ -5,14 +5,14 @@ const prefixUrl = "https://api.tidal.com/v1/tracks"
 const atob = (str: string) => Buffer.from(str, "base64").toString("binary")
 // TODO add mix
 
-type GetInput = {
+type GetArgs = {
   id: number
   countryCode?: string
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
 
-type StreamInput = {
+type StreamArgs = {
   id: number
   access_token: string
   audioquality?: "LOW" | "HIGH" | "LOSSLESS"
@@ -30,14 +30,14 @@ type PlaybackInfoPostPaywallResponse = {
   manifest: string
 }
 
-type StreamOutput = {
+type TidalStream = {
   mimeType: string
   codecs: string
   encryptionType: string
   urls: Array<string>
 }
 
-type ContributorsOutput = {
+type Contributors = {
   limit: number
   offset: number
   totalNumberOfItems: number
@@ -47,7 +47,7 @@ type ContributorsOutput = {
   }>
 }
 
-type ContributorsInput = {
+type ContributorsArgs = {
   id: number
   limit?: number
   offset?: number
@@ -62,7 +62,7 @@ const track = {
    * You need to either provide a client_id or an access_token.
    * Optionally you can set a countryCode, defaults to US.
    */
-  get: async ({ id, countryCode = "US", client_id, access_token }: GetInput) => {
+  get: async ({ id, countryCode = "US", client_id, access_token }: GetArgs) => {
     let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
@@ -91,7 +91,7 @@ const track = {
     playbackmode = "STREAM",
     assetpresentation = "FULL",
     countryCode = "US",
-  }: StreamInput) => {
+  }: StreamArgs) => {
     const data = (await got({
       prefixUrl,
       url: `${id}/playbackinfopostpaywall`,
@@ -107,7 +107,7 @@ const track = {
     if (data.manifestMimeType === "application/dash+xml")
       throw new Error("application/dash+xml is not supported")
 
-    return JSON.parse(atob(data.manifest)) as StreamOutput
+    return JSON.parse(atob(data.manifest)) as TidalStream
   },
   /**
    * Get a track's contributors.
@@ -122,7 +122,7 @@ const track = {
     offset = 0,
     client_id,
     access_token,
-  }: ContributorsInput) => {
+  }: ContributorsArgs) => {
     let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
@@ -141,7 +141,7 @@ const track = {
       headers,
     }).json()
 
-    return data as ContributorsOutput
+    return data as Contributors
   },
 }
 
