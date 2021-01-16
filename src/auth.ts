@@ -2,12 +2,12 @@ import got from "got"
 
 const prefixUrl = "https://auth.tidal.com/v1/oauth2"
 
-type DeviceTokenArgs = {
+interface DeviceTokenArgs {
   client_id: string
   scope?: string
 }
 
-type DeviceToken = {
+interface DeviceToken {
   deviceCode: string
   userCode: string
   verificationUri: string
@@ -16,7 +16,7 @@ type DeviceToken = {
   interval: number
 }
 
-type AccessTokenArgs = {
+interface AccessTokenArgs {
   client_id: string
   client_secret: string
   device_code: string
@@ -24,11 +24,18 @@ type AccessTokenArgs = {
   scope?: string
 }
 
-type AccessToken = {
+interface AccessToken {
   access_token: string
   refresh_token: string
   token_type: string
   expires_in: number
+}
+
+interface AuthorizationPending {
+  status: number
+  error: string
+  error_description: string
+  sub_status: number
 }
 
 const auth = {
@@ -70,9 +77,11 @@ const auth = {
         grant_type,
         scope,
       },
-    }).json()
+      throwHttpErrors: false,
+      responseType: "json",
+    })
 
-    return data as AccessToken
+    return data.body as AuthorizationPending | AccessToken
   },
 }
 

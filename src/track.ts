@@ -104,6 +104,7 @@ const track = {
       },
     }).json()) as PlaybackInfoPostPaywallResponse
 
+    /* istanbul ignore if */
     if (data.manifestMimeType === "application/dash+xml")
       throw new Error("application/dash+xml is not supported")
 

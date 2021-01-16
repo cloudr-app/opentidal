@@ -102,11 +102,9 @@ const playlist = {
     client_id,
     access_token,
   }: RecommendationsArgs) => {
-    let headers: Headers = { "x-tidal-token": client_id }
-    if (!client_id) headers = { authorization: `Bearer ${access_token}` }
+    let headers: Headers = { authorization: `Bearer ${access_token}` }
 
-    if (!client_id && !access_token)
-      throw new Error("You need to either provide a client_id or an access_token.")
+    if (!access_token) throw new Error("You need to provide an access_token.")
 
     const data = await got({
       prefixUrl,
