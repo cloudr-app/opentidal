@@ -2,7 +2,7 @@ import axios from "axios"
 import { Track } from "./types"
 
 const baseURL = "https://api.tidal.com/v1/tracks"
-const atob = (str) => Buffer.from(str, "base64").toString("binary")
+const atob = (str: string) => Buffer.from(str, "base64").toString("binary")
 // TODO add mix
 
 type GetInput = {
