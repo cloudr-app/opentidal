@@ -38,7 +38,7 @@ interface AuthorizationPending {
   sub_status: number
 }
 
-const auth = {
+export default {
   /**
    * Generate a DeviceCode and UserCode.
    * After that, redirect the User to the verificationUriComplete URI
@@ -84,5 +84,3 @@ const auth = {
     return data.body as AuthorizationPending | AccessToken
   },
 }
-
-export default auth

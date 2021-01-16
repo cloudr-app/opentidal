@@ -1,5 +1,6 @@
-import got, { Headers } from "got"
 import { Track, Album, AccessTokenOrClientId } from "./types"
+
+import got, { Headers } from "got"
 
 const prefixUrl = "https://api.tidal.com/v1/artists"
 // TODO add videos and mix
@@ -92,7 +93,7 @@ type AlbumsOutput = {
   items: Array<Album>
 }
 
-const artist = {
+export default {
   /**
    * Get info about an artist.
    * You need to either provide a client_id or an access_token.
@@ -231,5 +232,3 @@ const artist = {
     return data as AlbumsOutput
   },
 }
-
-export default artist

@@ -12,5 +12,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["tests", "*.config.js", "lib"]
+  "exclude": ["tests", "*.config.js", "lib", "coverage"]
 }

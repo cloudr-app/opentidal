@@ -1,5 +1,6 @@
-import got, { Headers } from "got"
 import { AccessTokenOrClientId, Track } from "./types"
+
+import got, { Headers } from "got"
 
 const prefixUrl = "https://api.tidal.com/v1/tracks"
 const atob = (str: string) => Buffer.from(str, "base64").toString("binary")
@@ -56,7 +57,7 @@ type ContributorsArgs = {
   access_token?: string
 } & AccessTokenOrClientId
 
-const track = {
+export default {
   /**
    * Get track info using its ID.
    * You need to either provide a client_id or an access_token.
@@ -145,5 +146,3 @@ const track = {
     return data as Contributors
   },
 }
-
-export default track

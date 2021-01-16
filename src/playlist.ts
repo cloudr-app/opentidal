@@ -1,5 +1,6 @@
-import got, { Headers } from "got"
 import { PlaylistInfo, PlaylistContent, AccessTokenOrClientId } from "./types"
+
+import got, { Headers } from "got"
 
 const prefixUrl = "https://api.tidal.com/v1/playlists"
 // TODO add all the endpoints that modify stuff
@@ -29,7 +30,7 @@ type RecommendationsArgs = {
   access_token?: string
 } & AccessTokenOrClientId
 
-const playlist = {
+export default {
   /**
    * Get info about a playlist.
    * You need to either provide a client_id or an access_token.
@@ -121,5 +122,3 @@ const playlist = {
     return data as PlaylistContent
   },
 }
-
-export default playlist
