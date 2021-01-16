@@ -1,10 +1,10 @@
-type Creator = {
+export interface Creator {
   id: number
   name: string
   type: string
 }
 
-type Track = {
+export interface Track {
   allowStreaming: boolean
   artist: Creator
   artists: Array<Creator>
@@ -38,7 +38,7 @@ type Track = {
   }
 }
 
-type Album = {
+export interface Album {
   allowStreaming: boolean
   artist: Creator
   artists: Array<Creator>
@@ -65,7 +65,7 @@ type Album = {
   videoCover: null
 }
 
-type PlaylistInfo = {
+export interface PlaylistInfo {
   created: string
   creator: Creator
   description: string
@@ -85,7 +85,7 @@ type PlaylistInfo = {
   uuid: string
 }
 
-type PlaylistContent = {
+export interface PlaylistContent {
   limit: number
   offset: number
   totalNumberOfItems: number
@@ -96,4 +96,4 @@ type PlaylistContent = {
   }>
 }
 
-export { Track, Album, PlaylistInfo, PlaylistContent }
+export type AccessTokenOrClientId = { client_id: string } | { access_token: string }

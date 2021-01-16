@@ -1,5 +1,5 @@
 import axios from "axios"
-import { Track, Album } from "./types"
+import { Track, Album, AccessTokenOrClientId } from "./types"
 
 const baseURL = "https://api.tidal.com/v1/artists"
 // TODO add videos and mix
@@ -9,7 +9,7 @@ type GetInput = {
   countryCode?: string
   client_id?: string
   access_token?: string
-} & ({ client_id: string } | { access_token: string })
+} & AccessTokenOrClientId
 
 type GetOutput = {
   id: number
@@ -33,7 +33,7 @@ type BioInput = {
   countryCode?: string
   client_id?: string
   access_token?: string
-} & ({ client_id: string } | { access_token: string })
+} & AccessTokenOrClientId
 
 type BioOutput = {
   source: string
@@ -47,7 +47,7 @@ type LinksInput = {
   countryCode?: string
   client_id?: string
   access_token?: string
-} & ({ client_id: string } | { access_token: string })
+} & AccessTokenOrClientId
 
 type LinksOutput = {
   limit: number
@@ -67,7 +67,7 @@ type TopTracksInput = {
   countryCode?: string
   client_id?: string
   access_token?: string
-} & ({ client_id: string } | { access_token: string })
+} & AccessTokenOrClientId
 
 type TopTracksOutput = {
   limit: number
@@ -83,7 +83,7 @@ type AlbumsInput = {
   countryCode?: string
   client_id?: string
   access_token?: string
-} & ({ client_id: string } | { access_token: string })
+} & AccessTokenOrClientId
 
 type AlbumsOutput = {
   limit: number

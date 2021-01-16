@@ -1,5 +1,5 @@
 import axios from "axios"
-import { PlaylistInfo, PlaylistContent } from "./types"
+import { PlaylistInfo, PlaylistContent, AccessTokenOrClientId } from "./types"
 
 const baseURL = "https://api.tidal.com/v1/playlists"
 // TODO add all the endpoints that modify stuff
@@ -9,7 +9,7 @@ type GetInput = {
   countryCode?: string
   client_id?: string
   access_token?: string
-} & ({ client_id: string } | { access_token: string })
+} & AccessTokenOrClientId
 
 type ItemsInput = {
   uuid: string
@@ -18,7 +18,7 @@ type ItemsInput = {
   countryCode?: string
   client_id?: string
   access_token?: string
-} & ({ client_id: string } | { access_token: string })
+} & AccessTokenOrClientId
 
 type RecommendationsInput = {
   uuid: string
@@ -27,7 +27,7 @@ type RecommendationsInput = {
   countryCode?: string
   client_id?: string
   access_token?: string
-} & ({ client_id: string } | { access_token: string })
+} & AccessTokenOrClientId
 
 const playlist = {
   /**

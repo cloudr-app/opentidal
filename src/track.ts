@@ -1,5 +1,5 @@
 import axios from "axios"
-import { Track } from "./types"
+import { AccessTokenOrClientId, Track } from "./types"
 
 const baseURL = "https://api.tidal.com/v1/tracks"
 const atob = (str: string) => Buffer.from(str, "base64").toString("binary")
@@ -10,7 +10,7 @@ type GetInput = {
   countryCode?: string
   client_id?: string
   access_token?: string
-} & ({ client_id: string } | { access_token: string })
+} & AccessTokenOrClientId
 
 type StreamInput = {
   id: number
@@ -54,7 +54,7 @@ type ContributorsInput = {
   countryCode?: string
   client_id?: string
   access_token?: string
-} & ({ client_id: string } | { access_token: string })
+} & AccessTokenOrClientId
 
 const track = {
   /**
