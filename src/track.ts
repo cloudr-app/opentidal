@@ -1,7 +1,7 @@
-import axios from "axios"
+import got, { Headers } from "got"
 import { AccessTokenOrClientId, Track } from "./types"
 
-const baseURL = "https://api.tidal.com/v1/tracks"
+const prefixUrl = "https://api.tidal.com/v1/tracks"
 const atob = (str: string) => Buffer.from(str, "base64").toString("binary")
 // TODO add mix
 
@@ -62,24 +62,23 @@ const track = {
    * You need to either provide a client_id or an access_token.
    * Optionally you can set a countryCode, defaults to US.
    */
-  get: async ({ id, countryCode = "US", client_id, access_token }: GetInput): Promise<Track> => {
-    let headers: object = { "x-tidal-token": client_id }
+  get: async ({ id, countryCode = "US", client_id, access_token }: GetInput) => {
+    let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const { data } = await axios({
-      baseURL,
-      method: "get",
+    const data = await got({
+      prefixUrl,
+      headers,
       url: `${id}`,
-      params: {
+      searchParams: {
         countryCode,
       },
-      headers,
-    })
+    }).json()
 
-    return data
+    return data as Track
   },
   /**
    * Recommended way to get a streaming URL.
@@ -92,23 +91,23 @@ const track = {
     playbackmode = "STREAM",
     assetpresentation = "FULL",
     countryCode = "US",
-  }: StreamInput): Promise<StreamOutput> => {
-    const { data }: { data: PlaybackInfoPostPaywallResponse } = await axios({
-      baseURL,
+  }: StreamInput) => {
+    const data = (await got({
+      prefixUrl,
       url: `${id}/playbackinfopostpaywall`,
       headers: { authorization: `Bearer ${access_token}` },
-      params: {
+      searchParams: {
         audioquality,
         playbackmode,
         assetpresentation,
         countryCode,
       },
-    })
+    }).json()) as PlaybackInfoPostPaywallResponse
 
     if (data.manifestMimeType === "application/dash+xml")
       throw new Error("application/dash+xml is not supported")
 
-    return JSON.parse(atob(data.manifest))
+    return JSON.parse(atob(data.manifest)) as StreamOutput
   },
   /**
    * Get a track's contributors.
@@ -123,26 +122,26 @@ const track = {
     offset = 0,
     client_id,
     access_token,
-  }: ContributorsInput): Promise<ContributorsOutput> => {
-    let headers: object = { "x-tidal-token": client_id }
+  }: ContributorsInput) => {
+    let headers: Headers = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const { data } = await axios({
-      baseURL,
+    const data = await got({
+      prefixUrl,
       method: "get",
       url: `${id}/contributors`,
-      params: {
+      searchParams: {
         countryCode,
         limit,
         offset,
       },
       headers,
-    })
+    }).json()
 
-    return data
+    return data as ContributorsOutput
   },
 }
 

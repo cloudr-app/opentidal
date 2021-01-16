@@ -1,7 +1,6 @@
-import axios from "axios"
-import * as qs from "qs"
+import got from "got"
 
-const baseURL = "https://auth.tidal.com/v1/oauth2"
+const prefixUrl = "https://auth.tidal.com/v1/oauth2"
 
 type DeviceTokenInput = {
   client_id: string
@@ -37,19 +36,15 @@ const auth = {
    * Generate a DeviceCode and UserCode.
    * After that, redirect the User to the verificationUriComplete URI
    */
-  getDeviceToken: async ({
-    client_id,
-    scope = "r_usr+w_usr+w_sub",
-  }: DeviceTokenInput): Promise<DeviceTokenOutput> => {
-    const { data } = await axios({
-      baseURL,
+  getDeviceToken: async ({ client_id, scope = "r_usr+w_usr+w_sub" }: DeviceTokenInput) => {
+    const data = await got({
+      prefixUrl,
       method: "post",
-      url: "/device_authorization",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      data: qs.stringify({ client_id, scope }),
-    })
+      url: "device_authorization",
+      form: { client_id, scope },
+    }).json()
 
-    return data
+    return data as DeviceTokenOutput
   },
   /**
    * Using the DeviceCode, poll this endpoint with the defined interval until
@@ -61,25 +56,23 @@ const auth = {
     device_code,
     grant_type = "urn:ietf:params:oauth:grant-type:device_code",
     scope = "r_usr+w_usr",
-  }: AccessTokenInput): Promise<AccessTokenOutput> => {
-    const { data } = await axios({
-      baseURL,
+  }: AccessTokenInput) => {
+    const data = await got({
+      prefixUrl,
       method: "post",
-      url: "/token",
+      url: "token",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      auth: {
-        username: client_id,
-        password: client_secret,
-      },
-      data: qs.stringify({
+      username: client_id,
+      password: client_secret,
+      form: {
         client_id,
         device_code,
         grant_type,
         scope,
-      }),
-    })
+      },
+    }).json()
 
-    return data
+    return data as AccessTokenOutput
   },
 }
 
