@@ -1,7 +1,7 @@
 {
   "name": "opentidal",
   "version": "0.0.1",
-  "description": "TypeScript implementation of the openTIDAL project.",
+  "description": "A thin TIDAL API wrapper written in TypeScript.",
   "main": "index.js",
   "files": [
     "lib/*"
@@ -11,7 +11,8 @@
     "dev": "nodemon",
     "build": "rimraf lib && tsc",
     "commit": "cz -S",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test"
   },
   "repository": {
     "type": "git",

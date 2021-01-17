@@ -6,14 +6,14 @@ const prefixUrl = "https://api.tidal.com/v1/tracks"
 const atob = (str: string) => Buffer.from(str, "base64").toString("binary")
 // TODO add mix
 
-type GetArgs = {
+export type GetArgs = {
   id: number
   countryCode?: string
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
 
-type StreamArgs = {
+export type StreamArgs = {
   id: number
   access_token: string
   audioquality?: "LOW" | "HIGH" | "LOSSLESS"
@@ -22,7 +22,7 @@ type StreamArgs = {
   countryCode?: string
 }
 
-type PlaybackInfoPostPaywallResponse = {
+export type PlaybackInfoPostPaywallResponse = {
   trackId: number
   assetPresentation: string
   audioMode: string
@@ -31,14 +31,14 @@ type PlaybackInfoPostPaywallResponse = {
   manifest: string
 }
 
-type TidalStream = {
+export type TidalStream = {
   mimeType: string
   codecs: string
   encryptionType: string
   urls: Array<string>
 }
 
-type Contributors = {
+export type Contributors = {
   limit: number
   offset: number
   totalNumberOfItems: number
@@ -48,7 +48,7 @@ type Contributors = {
   }>
 }
 
-type ContributorsArgs = {
+export type ContributorsArgs = {
   id: number
   limit?: number
   offset?: number

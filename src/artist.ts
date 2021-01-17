@@ -4,15 +4,14 @@ import got, { Headers } from "got"
 
 const prefixUrl = "https://api.tidal.com/v1/artists"
 // TODO add videos and mix
-
-type GetArgs = {
+export type GetArgs = {
   id: number
   countryCode?: string
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
 
-type Artist = {
+export type Artist = {
   id: number
   name: string
   artistTypes: Array<string>
@@ -29,28 +28,28 @@ type Artist = {
   }
 }
 
-type BioArgs = {
+export type BioArgs = {
   id: number
   countryCode?: string
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
 
-type Bio = {
+export type Bio = {
   source: string
   lastUpdated: string
   text: string
   summary: string
 }
 
-type LinksArgs = {
+export type LinksArgs = {
   id: number
   countryCode?: string
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
 
-type Links = {
+export type Links = {
   limit: number
   offset: number
   totalNumberOfItems: number
@@ -61,7 +60,7 @@ type Links = {
   source: string
 }
 
-type TopTracksArgs = {
+export type TopTracksArgs = {
   id: number
   limit?: number
   offset?: number
@@ -70,14 +69,14 @@ type TopTracksArgs = {
   access_token?: string
 } & AccessTokenOrClientId
 
-type TopTracks = {
+export type TopTracks = {
   limit: number
   offset: number
   totalNumberOfItems: number
   items: Array<Track>
 }
 
-type AlbumsArgs = {
+export type AlbumsArgs = {
   id: number
   limit?: number
   offset?: number
@@ -86,7 +85,7 @@ type AlbumsArgs = {
   access_token?: string
 } & AccessTokenOrClientId
 
-type AlbumsOutput = {
+export type AlbumsOutput = {
   limit: number
   offset: number
   totalNumberOfItems: number

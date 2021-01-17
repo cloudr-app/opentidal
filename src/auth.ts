@@ -1,13 +1,12 @@
 import got from "got"
 
 const prefixUrl = "https://auth.tidal.com/v1/oauth2"
-
-interface DeviceTokenArgs {
+export interface DeviceTokenArgs {
   client_id: string
   scope?: string
 }
 
-interface DeviceToken {
+export interface DeviceToken {
   deviceCode: string
   userCode: string
   verificationUri: string
@@ -16,7 +15,7 @@ interface DeviceToken {
   interval: number
 }
 
-interface AccessTokenArgs {
+export interface AccessTokenArgs {
   client_id: string
   client_secret: string
   device_code: string
@@ -24,14 +23,14 @@ interface AccessTokenArgs {
   scope?: string
 }
 
-interface AccessToken {
+export interface AccessToken {
   access_token: string
   refresh_token: string
   token_type: string
   expires_in: number
 }
 
-interface AuthorizationPending {
+export interface AuthorizationPending {
   status: number
   error: string
   error_description: string

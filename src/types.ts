@@ -4,11 +4,35 @@ export interface Creator {
   type: string
 }
 
+export interface Artist {
+  artistRoles?: ArtistRolesEntity[]
+  artistTypes?: string[]
+  id: number
+  mixes: {
+    [key: string]: string
+  }
+  name: string
+  picture: string
+  popularity: number
+  url: string
+}
+
+export interface ArtistRolesEntity {
+  category: string
+  categoryId: number
+}
+
 export interface Track {
+  album: {
+    id: number
+    title: string
+    cover: string
+    videoCover: any
+  }
   allowStreaming: boolean
   artist: Creator
-  artists: Array<Creator>
-  audioModes: Array<string>
+  artists: Creator[]
+  audioModes: string[]
   audioQuality: string
   copyright: string
   duration: number
@@ -16,6 +40,9 @@ export interface Track {
   explicit: boolean
   id: number
   isrc: string
+  mixes: {
+    TRACK_MIX: string
+  }
   peak: number
   popularity: number
   premiumStreamingOnly: boolean
@@ -27,22 +54,13 @@ export interface Track {
   url: string
   version: null
   volumeNumber: number
-  album: {
-    id: number
-    title: string
-    cover: string
-    videoCover: any
-  }
-  mixes: {
-    TRACK_MIX: string
-  }
 }
 
 export interface Album {
   allowStreaming: boolean
   artist: Creator
-  artists: Array<Creator>
-  audioModes: Array<string>
+  artists: Creator[]
+  audioModes: string[]
   audioQuality: string
   copyright: string
   cover: string
@@ -65,7 +83,7 @@ export interface Album {
   videoCover: null
 }
 
-export interface PlaylistInfo {
+export interface Playlist {
   created: string
   creator: Creator
   description: string
@@ -76,7 +94,7 @@ export interface PlaylistInfo {
   numberOfTracks: number
   numberOfVideos: number
   popularity: number
-  promotedArtists: Array<Creator>
+  promotedArtists: Creator[]
   publicPlaylist: boolean
   squareImage: string
   title: string
@@ -85,7 +103,39 @@ export interface PlaylistInfo {
   uuid: string
 }
 
-export interface PlaylistContent {
+export interface Video {
+  adsPrePaywallOnly: boolean
+  adsUrl?: null
+  album?: null
+  allowStreaming: boolean
+  artist: Creator
+  artists?: Creator[]
+  duration: number
+  explicit: boolean
+  id: number
+  imageId: string
+  imagePath?: null
+  popularity: number
+  quality: string
+  releaseDate: string
+  streamReady: boolean
+  streamStartDate: string
+  title: string
+  trackNumber: number
+  type: string
+  volumeNumber: number
+}
+
+export interface TidalList {
+  limit: number
+  offset: number
+  totalNumberOfItems: number
+  items: Array<{
+    [key: string]: any
+  }>
+}
+
+export interface PlaylistContent extends TidalList {
   limit: number
   offset: number
   totalNumberOfItems: number

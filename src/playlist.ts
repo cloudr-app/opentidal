@@ -1,18 +1,18 @@
-import { PlaylistInfo, PlaylistContent, AccessTokenOrClientId } from "./types"
+import { Playlist, PlaylistContent, AccessTokenOrClientId } from "./types"
 
 import got, { Headers } from "got"
 
 const prefixUrl = "https://api.tidal.com/v1/playlists"
 // TODO add all the endpoints that modify stuff
 
-type GetArgs = {
+export type GetArgs = {
   uuid: string
   countryCode?: string
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
 
-type ItemsArgs = {
+export type ItemsArgs = {
   uuid: string
   limit?: number
   offset?: number
@@ -21,7 +21,7 @@ type ItemsArgs = {
   access_token?: string
 } & AccessTokenOrClientId
 
-type RecommendationsArgs = {
+export type RecommendationsArgs = {
   uuid: string
   limit?: number
   offset?: number
@@ -53,7 +53,7 @@ export default {
       headers,
     }).json()
 
-    return data as PlaylistInfo
+    return data as Playlist
   },
   /**
    * Get a playlist's items.
