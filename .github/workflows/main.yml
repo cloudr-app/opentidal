@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test and coverage:
+  test-and-coverage:
     runs-on: ubuntu-latest
 
     steps:
