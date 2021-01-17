@@ -18,16 +18,26 @@ export interface DeviceToken {
 export interface AccessTokenArgs {
   client_id: string
   client_secret: string
-  device_code: string
   grant_type?: string
   scope?: string
 }
 
+export interface AccessTokenWithDeviceCode extends AccessTokenArgs {
+  device_code: string
+}
+
+export interface AccessTokenWithRefreshToken extends AccessTokenArgs {
+  refresh_token: string
+}
+
 export interface AccessToken {
   access_token: string
-  refresh_token: string
   token_type: string
   expires_in: number
+}
+
+export interface AccessTokenWithRefresh extends AccessToken {
+  refresh_token: string
 }
 
 export interface AuthorizationPending {
@@ -62,7 +72,7 @@ export default {
     device_code,
     grant_type = "urn:ietf:params:oauth:grant-type:device_code",
     scope = "r_usr+w_usr",
-  }: AccessTokenArgs) => {
+  }: AccessTokenWithDeviceCode) => {
     const data = await got({
       prefixUrl,
       method: "post",
@@ -80,6 +90,36 @@ export default {
       responseType: "json",
     })
 
-    return data.body as AuthorizationPending | AccessToken
+    return data.body as AuthorizationPending | AccessTokenWithRefresh
+  },
+  /**
+   * Using the DeviceCode, poll this endpoint with the defined interval until
+   * it stops returning the "authorization_pending" error.
+   */
+  useRefreshToken: async ({
+    client_id,
+    client_secret,
+    refresh_token,
+    grant_type = "refresh_token",
+    scope = "r_usr+w_usr",
+  }: AccessTokenWithRefreshToken) => {
+    const data = await got({
+      prefixUrl,
+      method: "post",
+      url: "token",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      username: client_id,
+      password: client_secret,
+      form: {
+        client_id,
+        refresh_token,
+        grant_type,
+        scope,
+      },
+      throwHttpErrors: false,
+      responseType: "json",
+    })
+
+    return data.body as AccessToken
   },
 }
