@@ -25,7 +25,7 @@
     "API"
   ],
   "author": "vaaski <admin@vaa.ski>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/openTIDAL/openTIDAL.js/issues"
   },
