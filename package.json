@@ -2,9 +2,9 @@
   "name": "opentidal",
   "version": "0.0.1",
   "description": "A thin TIDAL API wrapper written in TypeScript.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "files": [
-    "lib/*"
+    "lib/**/*"
   ],
   "scripts": {
     "test": "jest --coverage",
