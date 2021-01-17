@@ -1,8 +1,16 @@
 import playlist from "../src/playlist"
+import auth from "../src/auth"
 
 const client_id = process.env.CLIENT_ID as string
-const access_token = process.env.ACCESS_TOKEN as string
+const client_secret = process.env.CLIENT_SECRET as string
+const refresh_token = process.env.REFRESH_TOKEN as string
+let access_token: string
 const uuid = "22b5fd4f-4f83-4c12-bc93-812d5fd7052f"
+
+beforeAll(async () => {
+  const res = await auth.useRefreshToken({ client_id, client_secret, refresh_token })
+  access_token = res.access_token
+})
 
 test("Get playlist using client_id", async () => {
   const data = await playlist.get({ uuid, client_id })

@@ -1,8 +1,16 @@
 import artist from "../src/artist"
+import auth from "../src/auth"
 
 const client_id = process.env.CLIENT_ID as string
-const access_token = process.env.ACCESS_TOKEN as string
+const client_secret = process.env.CLIENT_SECRET as string
+const refresh_token = process.env.REFRESH_TOKEN as string
+let access_token: string
 const id = 3529689
+
+beforeAll(async () => {
+  const res = await auth.useRefreshToken({ client_id, client_secret, refresh_token })
+  access_token = res.access_token
+})
 
 test("Get artist using client_id", async () => {
   const data = await artist.get({ id, client_id })
