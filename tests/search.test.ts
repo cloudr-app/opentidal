@@ -35,6 +35,12 @@ test("Search tracks using client_id", async () => {
   expect(data.items.length).toBeTruthy()
 })
 
+test("Search tracks using client_id with limit", async () => {
+  const data = await search.tracks({ query, client_id, limit: 1 })
+  expect(data).toBeTruthy()
+  expect(data.items.length).toBe(1)
+})
+
 test("Search tracks using access_token", async () => {
   const data = await search.tracks({ query, access_token })
   expect(data).toBeTruthy()

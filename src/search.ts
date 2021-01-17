@@ -7,6 +7,7 @@ const prefixUrl = "https://api.tidal.com/v1/search"
 
 export type SearchArgs = {
   query: string
+  limit?: number
   countryCode?: string
   client_id?: string
   access_token?: string
@@ -43,6 +44,7 @@ export interface AllSearch {
 
 const searchFactory = (url: string) => async ({
   query,
+  limit = 50,
   countryCode = "US",
   client_id,
   access_token,
@@ -60,6 +62,7 @@ const searchFactory = (url: string) => async ({
     searchParams: {
       countryCode,
       query,
+      limit,
     },
   }).json()
 
@@ -75,13 +78,11 @@ export interface Search {
   playlists(opt: SearchArgs): Promise<PlaylistSearch>
 }
 
-const search: Search = {
+export default {
   all: searchFactory(""),
   artists: searchFactory("artists"),
   albums: searchFactory("albums"),
   tracks: searchFactory("tracks"),
   videos: searchFactory("videos"),
   playlists: searchFactory("playlists"),
-}
-
-export default search
+} as Search
