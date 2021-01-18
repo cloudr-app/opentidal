@@ -1,6 +1,6 @@
 import { Playlist, PlaylistContent, AccessTokenOrClientId } from "./types"
 
-import axios from "axios"
+import { AxiosInstance } from "axios"
 
 const baseURL = "https://api.tidal.com/v1/playlists"
 // TODO add all the endpoints that modify stuff
@@ -30,7 +30,7 @@ export type RecommendationsArgs = {
   access_token?: string
 } & AccessTokenOrClientId
 
-export default {
+export default (axios: AxiosInstance) =>({
   /**
    * Get info about a playlist.
    * You need to either provide a client_id or an access_token.
@@ -125,3 +125,4 @@ export default {
     return data as PlaylistContent
   },
 }
+)

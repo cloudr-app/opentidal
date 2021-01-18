@@ -1,6 +1,6 @@
 import { AccessTokenOrClientId, Album, Playlist, TidalList, Track, Video, Artist } from "./types"
 
-import axios from "axios"
+import { AxiosInstance } from "axios"
 
 const baseURL = "https://api.tidal.com/v1/search"
 
@@ -41,7 +41,7 @@ export interface AllSearch {
   topHit: Artist | Album | Playlist | Track | Video
 }
 
-const searchFactory = (url: string) => async ({
+const searchFactory = (url: string, axios: AxiosInstance) => async ({
   query,
   limit = 50,
   countryCode = "US",
@@ -78,11 +78,11 @@ export interface Search {
   playlists(opt: SearchArgs): Promise<PlaylistSearch>
 }
 
-export default {
-  all: searchFactory(""),
-  artists: searchFactory("artists"),
-  albums: searchFactory("albums"),
-  tracks: searchFactory("tracks"),
-  videos: searchFactory("videos"),
-  playlists: searchFactory("playlists"),
-} as Search
+export default (axios: AxiosInstance) =>({
+  all: searchFactory("", axios),
+  artists: searchFactory("artists", axios),
+  albums: searchFactory("albums", axios),
+  tracks: searchFactory("tracks", axios),
+  videos: searchFactory("videos", axios),
+  playlists: searchFactory("playlists", axios),
+}) as Search

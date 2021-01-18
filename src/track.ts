@@ -1,6 +1,6 @@
 import { AccessTokenOrClientId, Track } from "./types"
 
-import axios from "axios"
+import { AxiosInstance } from "axios"
 
 const baseURL = "https://api.tidal.com/v1/tracks"
 const atob = (str: string) => Buffer.from(str, "base64").toString("binary")
@@ -57,7 +57,7 @@ export type ContributorsArgs = {
   access_token?: string
 } & AccessTokenOrClientId
 
-export default {
+export default (axios: AxiosInstance) => ({
   /**
    * Get track info using its ID.
    * You need to either provide a client_id or an access_token.
@@ -148,4 +148,4 @@ export default {
 
     return data as Contributors
   },
-}
+})

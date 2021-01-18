@@ -1,5 +1,4 @@
-import playlist from "../src/playlist"
-import auth from "../src/auth"
+import { playlist, auth } from "../src"
 
 const client_id = process.env.CLIENT_ID as string
 const client_secret = process.env.CLIENT_SECRET as string

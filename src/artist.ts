@@ -1,6 +1,6 @@
 import { Track, Album, AccessTokenOrClientId, Artist } from "./types"
 
-import axios from "axios"
+import { AxiosInstance } from "axios"
 
 const baseURL = "https://api.tidal.com/v1/artists"
 // TODO add videos and mix
@@ -75,7 +75,7 @@ export type AlbumsOutput = {
   items: Array<Album>
 }
 
-export default {
+export default (axios: AxiosInstance) => ({
   /**
    * Get info about an artist.
    * You need to either provide a client_id or an access_token.
@@ -219,3 +219,4 @@ export default {
     return data as AlbumsOutput
   },
 }
+)

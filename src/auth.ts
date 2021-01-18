@@ -1,4 +1,4 @@
-import axios from "axios"
+import { AxiosInstance } from "axios"
 import * as qs from "qs"
 
 const baseURL = "https://auth.tidal.com/v1/oauth2"
@@ -48,7 +48,7 @@ export interface AuthorizationPending {
   sub_status: number
 }
 
-export default {
+export default (axios: AxiosInstance) => ({
   /**
    * Generate a DeviceCode and UserCode.
    * After that, redirect the User to the verificationUriComplete URI
@@ -126,4 +126,4 @@ export default {
 
     return data as AccessToken
   },
-}
+})
