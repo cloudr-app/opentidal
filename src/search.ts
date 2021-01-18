@@ -1,9 +1,8 @@
-import { AccessTokenOrClientId, Album, Playlist, TidalList, Track, Video } from "./types"
+import { AccessTokenOrClientId, Album, Playlist, TidalList, Track, Video, Artist } from "./types"
 
-import got, { Headers } from "got"
-import { Artist } from "./artist"
+import axios from "axios"
 
-const prefixUrl = "https://api.tidal.com/v1/search"
+const baseURL = "https://api.tidal.com/v1/search"
 
 export type SearchArgs = {
   query: string
@@ -49,22 +48,23 @@ const searchFactory = (url: string) => async ({
   client_id,
   access_token,
 }: SearchArgs) => {
-  let headers: Headers = { "x-tidal-token": client_id }
+  let headers: any = { "x-tidal-token": client_id }
   if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
   if (!client_id && !access_token)
     throw new Error("You need to either provide a client_id or an access_token.")
 
-  const data = await got({
-    prefixUrl,
+  const { data } = await axios({
+    baseURL,
     headers,
     url,
-    searchParams: {
+    params: {
       countryCode,
       query,
       limit,
     },
-  }).json()
+    responseType: "json",
+  })
 
   return data as any
 }

@@ -1,8 +1,8 @@
 import { AccessTokenOrClientId, Track } from "./types"
 
-import got, { Headers } from "got"
+import axios from "axios"
 
-const prefixUrl = "https://api.tidal.com/v1/tracks"
+const baseURL = "https://api.tidal.com/v1/tracks"
 const atob = (str: string) => Buffer.from(str, "base64").toString("binary")
 // TODO add mix
 
@@ -64,20 +64,21 @@ export default {
    * Optionally you can set a countryCode, defaults to US.
    */
   get: async ({ id, countryCode = "US", client_id, access_token }: GetArgs) => {
-    let headers: Headers = { "x-tidal-token": client_id }
+    let headers: any = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       headers,
       url: `${id}`,
-      searchParams: {
+      params: {
         countryCode,
       },
-    }).json()
+      responseType: "json",
+    })
 
     return data as Track
   },
@@ -93,17 +94,19 @@ export default {
     assetpresentation = "FULL",
     countryCode = "US",
   }: StreamArgs) => {
-    const data = (await got({
-      prefixUrl,
+    const response = await axios({
+      baseURL,
       url: `${id}/playbackinfopostpaywall`,
       headers: { authorization: `Bearer ${access_token}` },
-      searchParams: {
+      params: {
         audioquality,
         playbackmode,
         assetpresentation,
         countryCode,
       },
-    }).json()) as PlaybackInfoPostPaywallResponse
+      responseType: "json",
+    })
+    const data = response.data as PlaybackInfoPostPaywallResponse
 
     /* istanbul ignore if */
     if (data.manifestMimeType === "application/dash+xml")
@@ -125,23 +128,23 @@ export default {
     client_id,
     access_token,
   }: ContributorsArgs) => {
-    let headers: Headers = { "x-tidal-token": client_id }
+    let headers: any = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const data = await got({
-      prefixUrl,
-      method: "get",
+    const { data } = await axios({
+      baseURL,
       url: `${id}/contributors`,
-      searchParams: {
+      params: {
         countryCode,
         limit,
         offset,
       },
       headers,
-    }).json()
+      responseType: "json",
+    })
 
     return data as Contributors
   },

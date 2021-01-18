@@ -1,8 +1,8 @@
-import { Track, Album, AccessTokenOrClientId } from "./types"
+import { Track, Album, AccessTokenOrClientId, Artist } from "./types"
 
-import got, { Headers } from "got"
+import axios from "axios"
 
-const prefixUrl = "https://api.tidal.com/v1/artists"
+const baseURL = "https://api.tidal.com/v1/artists"
 // TODO add videos and mix
 export type GetArgs = {
   id: number
@@ -10,23 +10,6 @@ export type GetArgs = {
   client_id?: string
   access_token?: string
 } & AccessTokenOrClientId
-
-export type Artist = {
-  id: number
-  name: string
-  artistTypes: Array<string>
-  url: string
-  picture: string
-  popularity: number
-  artistRoles: Array<{
-    categoryId: number
-    category: string
-  }>
-  mixes: {
-    MASTER_ARTIST_MIX: string
-    ARTIST_MIX: string
-  }
-}
 
 export type BioArgs = {
   id: number
@@ -99,20 +82,21 @@ export default {
    * Optionally you can set a countryCode, defaults to US.
    */
   get: async ({ id, countryCode = "US", client_id, access_token }: GetArgs) => {
-    let headers: Headers = { "x-tidal-token": client_id }
+    let headers: any = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       url: `${id}`,
-      searchParams: {
+      params: {
         countryCode,
       },
       headers,
-    }).json()
+      responseType: "json",
+    })
 
     return data as Artist
   },
@@ -122,20 +106,21 @@ export default {
    * Optionally you can set a countryCode, defaults to US.
    */
   bio: async ({ id, countryCode = "US", client_id, access_token }: BioArgs) => {
-    let headers: Headers = { "x-tidal-token": client_id }
+    let headers: any = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       url: `${id}/bio`,
-      searchParams: {
+      params: {
         countryCode,
       },
       headers,
-    }).json()
+      responseType: "json",
+    })
 
     return data as Bio
   },
@@ -147,20 +132,21 @@ export default {
    * Optionally you can set a countryCode, defaults to US.
    */
   links: async ({ id, countryCode = "US", client_id, access_token }: LinksArgs) => {
-    let headers: Headers = { "x-tidal-token": client_id }
+    let headers: any = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       url: `${id}/links`,
-      searchParams: {
+      params: {
         countryCode,
       },
       headers,
-    }).json()
+      responseType: "json",
+    })
 
     return data as Links
   },
@@ -178,22 +164,23 @@ export default {
     client_id,
     access_token,
   }: TopTracksArgs) => {
-    let headers: Headers = { "x-tidal-token": client_id }
+    let headers: any = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       url: `${id}/toptracks`,
-      searchParams: {
+      params: {
         countryCode,
         limit,
         offset,
       },
       headers,
-    }).json()
+      responseType: "json",
+    })
 
     return data as TopTracks
   },
@@ -211,22 +198,23 @@ export default {
     client_id,
     access_token,
   }: AlbumsArgs) => {
-    let headers: Headers = { "x-tidal-token": client_id }
+    let headers: any = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       url: `${id}/albums`,
-      searchParams: {
+      params: {
         countryCode,
         limit,
         offset,
       },
       headers,
-    }).json()
+      responseType: "json",
+    })
 
     return data as AlbumsOutput
   },

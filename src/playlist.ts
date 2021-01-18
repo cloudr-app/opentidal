@@ -1,8 +1,8 @@
 import { Playlist, PlaylistContent, AccessTokenOrClientId } from "./types"
 
-import got, { Headers } from "got"
+import axios from "axios"
 
-const prefixUrl = "https://api.tidal.com/v1/playlists"
+const baseURL = "https://api.tidal.com/v1/playlists"
 // TODO add all the endpoints that modify stuff
 
 export type GetArgs = {
@@ -37,21 +37,22 @@ export default {
    * Optionally you can set a countryCode, defaults to US.
    */
   get: async ({ uuid, countryCode = "US", client_id, access_token }: GetArgs) => {
-    let headers: Headers = { "x-tidal-token": client_id }
+    let headers: any = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       method: "get",
       url: `${uuid}`,
-      searchParams: {
+      params: {
         countryCode,
       },
       headers,
-    }).json()
+      responseType: "json",
+    })
 
     return data as Playlist
   },
@@ -69,23 +70,24 @@ export default {
     client_id,
     access_token,
   }: ItemsArgs) => {
-    let headers: Headers = { "x-tidal-token": client_id }
+    let headers: any = { "x-tidal-token": client_id }
     if (!client_id) headers = { authorization: `Bearer ${access_token}` }
 
     if (!client_id && !access_token)
       throw new Error("You need to either provide a client_id or an access_token.")
 
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       method: "get",
       url: `${uuid}/items`,
-      searchParams: {
+      params: {
         countryCode,
         limit,
         offset,
       },
       headers,
-    }).json()
+      responseType: "json",
+    })
 
     return data as PlaylistContent
   },
@@ -103,21 +105,22 @@ export default {
     client_id,
     access_token,
   }: RecommendationsArgs) => {
-    let headers: Headers = { authorization: `Bearer ${access_token}` }
+    let headers: any = { authorization: `Bearer ${access_token}` }
 
     if (!access_token) throw new Error("You need to provide an access_token.")
 
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       method: "get",
       url: `${uuid}/recommendations/items`,
-      searchParams: {
+      params: {
         countryCode,
         limit,
         offset,
       },
       headers,
-    }).json()
+      responseType: "json",
+    })
 
     return data as PlaylistContent
   },

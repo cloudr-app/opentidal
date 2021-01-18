@@ -1,6 +1,7 @@
-import got from "got"
+import axios from "axios"
+import * as qs from "qs"
 
-const prefixUrl = "https://auth.tidal.com/v1/oauth2"
+const baseURL = "https://auth.tidal.com/v1/oauth2"
 export interface DeviceTokenArgs {
   client_id: string
   scope?: string
@@ -53,12 +54,13 @@ export default {
    * After that, redirect the User to the verificationUriComplete URI
    */
   getDeviceToken: async ({ client_id, scope = "r_usr+w_usr+w_sub" }: DeviceTokenArgs) => {
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       method: "post",
       url: "device_authorization",
-      form: { client_id, scope },
-    }).json()
+      data: qs.stringify({ client_id, scope }),
+      responseType: "json",
+    })
 
     return data as DeviceToken
   },
@@ -73,28 +75,29 @@ export default {
     grant_type = "urn:ietf:params:oauth:grant-type:device_code",
     scope = "r_usr+w_usr",
   }: AccessTokenWithDeviceCode) => {
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       method: "post",
       url: "token",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      username: client_id,
-      password: client_secret,
-      form: {
+      auth: {
+        username: client_id,
+        password: client_secret,
+      },
+      data: qs.stringify({
         client_id,
         device_code,
         grant_type,
         scope,
-      },
-      throwHttpErrors: false,
+      }),
       responseType: "json",
+      validateStatus: (status) => [200, 400].includes(status),
     })
 
-    return data.body as AuthorizationPending | AccessTokenWithRefresh
+    return data as AuthorizationPending | AccessTokenWithRefresh
   },
   /**
-   * Using the DeviceCode, poll this endpoint with the defined interval until
-   * it stops returning the "authorization_pending" error.
+   * Get an access_token using a refresh_token
    */
   useRefreshToken: async ({
     client_id,
@@ -103,23 +106,24 @@ export default {
     grant_type = "refresh_token",
     scope = "r_usr+w_usr",
   }: AccessTokenWithRefreshToken) => {
-    const data = await got({
-      prefixUrl,
+    const { data } = await axios({
+      baseURL,
       method: "post",
       url: "token",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      username: client_id,
-      password: client_secret,
-      form: {
+      auth: {
+        username: client_id,
+        password: client_secret,
+      },
+      data: qs.stringify({
         client_id,
         refresh_token,
         grant_type,
         scope,
-      },
-      throwHttpErrors: false,
+      }),
       responseType: "json",
     })
 
-    return data.body as AccessToken
+    return data as AccessToken
   },
 }
