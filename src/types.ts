@@ -1,20 +1,20 @@
 export interface Creator {
   id: number
-  name: string
-  type: string
+  name?: string
+  type?: string | null
 }
 
 export interface Artist {
   artistRoles?: ArtistRolesEntity[]
   artistTypes?: string[]
   id: number
-  mixes: {
-    [key: string]: string
-  }
   name: string
   picture: string
   popularity: number
   url: string
+  mixes: {
+    [key: string]: string
+  }
 }
 
 export interface ArtistRolesEntity {
@@ -23,12 +23,6 @@ export interface ArtistRolesEntity {
 }
 
 export interface Track {
-  album: {
-    id: number
-    title: string
-    cover: string
-    videoCover: any
-  }
   allowStreaming: boolean
   artist: Creator
   artists: Creator[]
@@ -40,9 +34,6 @@ export interface Track {
   explicit: boolean
   id: number
   isrc: string
-  mixes: {
-    TRACK_MIX: string
-  }
   peak: number
   popularity: number
   premiumStreamingOnly: boolean
@@ -54,6 +45,15 @@ export interface Track {
   url: string
   version: null
   volumeNumber: number
+  album: {
+    id: number
+    title: string
+    cover: string
+    videoCover: any
+  }
+  mixes: {
+    TRACK_MIX: string
+  }
 }
 
 export interface Album {
@@ -135,6 +135,10 @@ export interface TidalList {
   }>
 }
 
+export interface PlaylistTrack extends Track {
+  dateAdded: string
+}
+
 export interface PlaylistContent extends TidalList {
   limit: number
   offset: number
@@ -142,7 +146,7 @@ export interface PlaylistContent extends TidalList {
   items: Array<{
     type: string
     cut: any
-    item: Track
+    item: PlaylistTrack
   }>
 }
 
