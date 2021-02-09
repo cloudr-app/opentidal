@@ -24,7 +24,7 @@
 # Example usage
 
 ```ts
-import { auth } from "openTIDAL"
+import { auth } from "opentidal"
 
 const client_id = "client_id"
 const client_secret = "client_secret"
