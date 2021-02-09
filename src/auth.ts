@@ -53,7 +53,7 @@ export default (axios: AxiosInstance) => ({
    * Generate a DeviceCode and UserCode.
    * After that, redirect the User to the verificationUriComplete URI
    */
-  getDeviceToken: async ({ client_id, scope = "r_usr+w_usr+w_sub" }: DeviceTokenArgs) => {
+  getDeviceToken: async ({ client_id, scope = "r_usr+w_usr" }: DeviceTokenArgs) => {
     const { data } = await axios({
       baseURL,
       method: "post",
