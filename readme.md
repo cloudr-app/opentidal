@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/openTIDAL/openTIDAL.ts" target="_blank">
+  <a href="https://github.com/cloudr-app/openTIDAL" target="_blank">
     <img src="https://colo.vaaski.com/static/openTIDAL-banner.svg">
   </a>
 </p>
@@ -13,8 +13,8 @@
   <a href="https://npmjs.org/package/opentidal" alt="version">
     <img src="https://img.shields.io/npm/v/opentidal.svg?style=for-the-badge">
   </a>
-  <a href="https://codecov.io/gh/openTIDAL/openTIDAL.js" alt="downloads">
-    <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/openTIDAL/openTIDAL.ts?style=for-the-badge">
+  <a href="https://codecov.io/gh/cloudr-app/openTIDAL" alt="downloads">
+    <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/cloudr-app/openTIDAL?style=for-the-badge">
   </a>
   <a href="https://npmjs.org/package/opentidal" alt="downloads">
     <img src="https://img.shields.io/npm/dw/opentidal.svg?style=for-the-badge">
